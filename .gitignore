@@ -1,0 +1,9 @@
+.venv/
+chrome_profile_*/
+.bkit/
+.DS_Store
+*.html
+*.log
+__pycache__/
+.notebooklm-mcp/
+auth.json
