@@ -1,0 +1,26 @@
+{
+  "notebook_id": "85174ae4-71e1-41de-b0df-0587c830031e",
+  "results": [
+    {
+      "index": 1,
+      "key": "strategy",
+      "title": "전략 관점: 왜 지금 Agentic Workflow를 도입해야 하는가",
+      "file": "research/agentic_workflow_output/01_AI콘텐츠_AgenticWorkflow_blog_post_01_strategy.md",
+      "chars": 3581
+    },
+    {
+      "index": 2,
+      "key": "execution",
+      "title": "실행 관점: 실패하지 않는 Agentic Workflow 구현 로드맵",
+      "file": "research/agentic_workflow_output/01_AI콘텐츠_AgenticWorkflow_blog_post_02_execution.md",
+      "chars": 3413
+    },
+    {
+      "index": 3,
+      "key": "governance",
+      "title": "거버넌스 관점: Agentic Workflow의 리스크를 성과로 바꾸는 법",
+      "file": "research/agentic_workflow_output/01_AI콘텐츠_AgenticWorkflow_blog_post_03_governance.md",
+      "chars": 3798
+    }
+  ]
+}

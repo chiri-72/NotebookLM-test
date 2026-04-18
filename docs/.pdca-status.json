@@ -1,9 +1,25 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-02-17T14:05:05.544Z",
-  "activeFeatures": [],
-  "primaryFeature": null,
-  "features": {},
+  "lastUpdated": "2026-02-18T14:50:01.410Z",
+  "activeFeatures": [
+    "scripts"
+  ],
+  "primaryFeature": "scripts",
+  "features": {
+    "scripts": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-02-18T14:49:57.302Z",
+        "lastUpdated": "2026-02-18T14:50:01.409Z"
+      },
+      "lastFile": "/Users/chiri/Desktop/AI 서비스/DeepResearch/scripts/setup-notebooklm.sh"
+    }
+  },
   "pipeline": {
     "currentPhase": 1,
     "level": "Dynamic",
@@ -12,7 +28,20 @@
   "session": {
     "startedAt": "2026-02-17T14:05:05.544Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-02-17T14:05:05.544Z"
+    "lastActivity": "2026-02-18T14:50:01.410Z"
   },
-  "history": []
+  "history": [
+    {
+      "timestamp": "2026-02-18T14:49:57.302Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-18T14:50:01.410Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    }
+  ]
 }

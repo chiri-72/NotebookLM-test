@@ -1,0 +1,124 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SKILL_DIR="$ROOT_DIR/skills/skills/notebooklm"
+RUNNER="$SKILL_DIR/scripts/run.py"
+GUARDRAIL="$ROOT_DIR/scripts/notebooklm_guardrail.sh"
+INTENT_ROUTER="$ROOT_DIR/scripts/notebooklm_intent_router.sh"
+
+if [[ ! -f "$RUNNER" ]]; then
+  echo "Error: NotebookLM runner not found at $RUNNER"
+  exit 1
+fi
+
+usage() {
+  cat <<'EOF'
+Usage:
+  notebookLM setup
+  notebookLM status
+  notebookLM reauth
+  notebookLM list
+  notebookLM ask "질문"
+  notebookLM ask "질문" --notebook-id <id>
+  notebookLM ask "질문" --notebook-url <url>
+  notebookLM workflow-agentic
+  notebookLM workflow-content6
+  notebookLM <raw script args...>
+
+Examples:
+  notebookLM setup
+  notebookLM ask "이 노트북 핵심 3줄 요약"
+  notebookLM workflow-agentic
+  notebookLM notebook_manager.py search --query "AI"
+EOF
+}
+
+if [[ $# -lt 1 ]]; then
+  usage
+  exit 1
+fi
+
+cmd="$1"
+shift || true
+
+if [[ -x "$GUARDRAIL" ]]; then
+  "$GUARDRAIL" "$cmd"
+fi
+
+# Enforced policy for all NotebookLM runs
+export NOTEBOOKLM_ONLY=1
+export NOTEBOOKLM_ADAPTIVE_LOAD=1
+export NOTEBOOKLM_OVERLOAD_LIMIT="${NOTEBOOKLM_OVERLOAD_LIMIT:-2}"
+export NOTEBOOKLM_DEEP_FIRST=1
+export NOTEBOOKLM_DEEP_TIMEOUT="${NOTEBOOKLM_DEEP_TIMEOUT:-1200}"
+export NOTEBOOKLM_MAX_SOURCES="${NOTEBOOKLM_MAX_SOURCES:-0}"
+export NOTEBOOKLM_TARGET_SOURCES="${NOTEBOOKLM_TARGET_SOURCES:-25}"
+export NOTEBOOKLM_RECENCY_WINDOW_YEARS="${NOTEBOOKLM_RECENCY_WINDOW_YEARS:-2}"
+export NOTEBOOKLM_REQUIRE_STUDIO_ARTIFACT=1
+
+case "$cmd" in
+  setup)
+    cd "$SKILL_DIR"
+    exec python3 scripts/run.py auth_manager.py setup "$@"
+    ;;
+  status)
+    cd "$SKILL_DIR"
+    exec python3 scripts/run.py auth_manager.py status "$@"
+    ;;
+  reauth)
+    cd "$SKILL_DIR"
+    exec python3 scripts/run.py auth_manager.py reauth "$@"
+    ;;
+  list)
+    cd "$SKILL_DIR"
+    exec python3 scripts/run.py notebook_manager.py list "$@"
+    ;;
+  ask)
+    if [[ $# -lt 1 ]]; then
+      echo "Error: ask requires a question string."
+      echo 'Example: notebookLM ask "요약해줘"'
+      exit 1
+    fi
+    question="$1"
+    shift
+    cd "$SKILL_DIR"
+    exec python3 scripts/run.py ask_question.py --question "$question" "$@"
+    ;;
+  workflow-agentic)
+    cd "$ROOT_DIR"
+    exec .venv/bin/python research/run_agentic_workflow_deep_research.py
+    ;;
+  workflow-content6)
+    cd "$ROOT_DIR"
+    exec .venv/bin/python research/run_notebooklm_ai_content_pipeline.py
+    ;;
+  help|-h|--help)
+    usage
+    ;;
+  *)
+    # If unknown plain-language input is provided, route intent first.
+    if [[ "$cmd" != *.py ]]; then
+      intent="$cmd ${*:-}"
+      if [[ -x "$INTENT_ROUTER" ]]; then
+        route="$("$INTENT_ROUTER" "$intent")"
+        if [[ "$route" == "setup" ]]; then
+          cd "$SKILL_DIR"
+          exec python3 scripts/run.py auth_manager.py setup
+        elif [[ "$route" == "status" ]]; then
+          cd "$SKILL_DIR"
+          exec python3 scripts/run.py auth_manager.py status
+        elif [[ "$route" == "list" ]]; then
+          cd "$SKILL_DIR"
+          exec python3 scripts/run.py notebook_manager.py list
+        elif [[ "$route" == ask::* ]]; then
+          q="${route#ask::}"
+          cd "$SKILL_DIR"
+          exec python3 scripts/run.py ask_question.py --question "$q"
+        fi
+      fi
+    fi
+    cd "$SKILL_DIR"
+    exec python3 scripts/run.py "$cmd" "$@"
+    ;;
+esac

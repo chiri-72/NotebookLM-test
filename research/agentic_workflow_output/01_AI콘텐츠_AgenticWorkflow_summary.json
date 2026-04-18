@@ -1,0 +1,20 @@
+{
+  "created_at": "2026-02-19 00:53:15",
+  "notebook_name": "01_AI콘텐츠_AgenticWorkflow",
+  "notebook_id": "85174ae4-71e1-41de-b0df-0587c830031e",
+  "notebook_url": "https://notebooklm.google.com/notebook/85174ae4-71e1-41de-b0df-0587c830031e",
+  "deep_task": {
+    "task_id": "bda06e45-2f78-4644-a0eb-9d735c77a43f",
+    "report_id": "fcea9f8b-07d3-4681-820e-3029772c23a4",
+    "notebook_id": "85174ae4-71e1-41de-b0df-0587c830031e",
+    "query": "Agentic Workflow에 대해 딥리서치를 수행해줘. 아키텍처 패턴, 오케스트레이션, 평가/관측, 보안/거버넌스, 운영 체크리스트를 포함해줘.",
+    "source": "web",
+    "mode": "deep"
+  },
+  "deep_polled_status": "fallback_to_fast",
+  "selected_source_count": 10,
+  "imported_source_count": 10,
+  "current_source_count": 10,
+  "youtube_count": 0,
+  "blog_chars": 7061
+}
